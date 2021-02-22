@@ -268,6 +268,7 @@ def draw_bbox(image, bboxes, info = False, counted_classes = None, show_label=Tr
                     cv2.putText(image, "{}s detected: {}".format(key, value), (5, offset),
                             cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (0, 255, 0), 2)
                     offset += height_ratio
+    o.write("\n")
     return image
 
 def bbox_iou(bboxes1, bboxes2):
