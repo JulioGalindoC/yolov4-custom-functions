@@ -249,7 +249,7 @@ def draw_bbox(image, bboxes, info = False, counted_classes = None, show_label=Tr
             cv2.rectangle(image, c1, c2, bbox_color, bbox_thick)
 
             if info:
-                print("Object found: {}, Confidence: {:.2f}, BBox Coords (xmin, ymin, xmax, ymax): {}, {}, {}, {} ".format(class_name, score, coor[0], coor[1], coor[2], coor[3]))
+                print("{}, Confidence: {:.2f}, BBox Inf. Coords (xmin, ymin, xmax, ymin): {}, {}, {}, {} ".format(class_name, score, coor[0], coor[1], coor[2], coor[1]))
 
             if show_label:
                 bbox_mess = '%s: %.2f' % (class_name, score)
