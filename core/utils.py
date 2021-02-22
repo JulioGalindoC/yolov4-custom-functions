@@ -86,33 +86,12 @@ def recognize_plate(img, coords):
     return plate_num
 
 def load_freeze_layer(model='yolov4', tiny=False):
-    if tiny:
-        if model == 'yolov3':
-            freeze_layouts = ['conv2d_9', 'conv2d_12']
-        else:
-            freeze_layouts = ['conv2d_17', 'conv2d_20']
-    else:
-        if model == 'yolov3':
-            freeze_layouts = ['conv2d_58', 'conv2d_66', 'conv2d_74']
-        else:
-            freeze_layouts = ['conv2d_93', 'conv2d_101', 'conv2d_109']
+    freeze_layouts = ['conv2d_93', 'conv2d_101', 'conv2d_109']
     return freeze_layouts
 
 def load_weights(model, weights_file, model_name='yolov4', is_tiny=False):
-    if is_tiny:
-        if model_name == 'yolov3':
-            layer_size = 13
-            output_pos = [9, 12]
-        else:
-            layer_size = 21
-            output_pos = [17, 20]
-    else:
-        if model_name == 'yolov3':
-            layer_size = 75
-            output_pos = [58, 66, 74]
-        else:
-            layer_size = 110
-            output_pos = [93, 101, 109]
+    layer_size = 110
+    output_pos = [93, 101, 109]
     wf = open(weights_file, 'rb')
     major, minor, revision, seen, _ = np.fromfile(wf, dtype=np.int32, count=5)
 
@@ -177,10 +156,7 @@ def load_config(FLAGS):
 
 def get_anchors(anchors_path, tiny=False):
     anchors = np.array(anchors_path)
-    if tiny:
-        return anchors.reshape(2, 3, 2)
-    else:
-        return anchors.reshape(3, 3, 2)
+    return anchors.reshape(3, 3, 2)
 
 def image_preprocess(image, target_size, gt_boxes=None):
     ih, iw    = target_size
@@ -261,13 +237,6 @@ def draw_bbox(image, bboxes, info = False, counted_classes = None, show_label=Tr
                 cv2.putText(image, bbox_mess, (c1[0], np.float32(c1[1] - 2)), cv2.FONT_HERSHEY_SIMPLEX,
                         fontScale, (0, 0, 0), bbox_thick // 2, lineType=cv2.LINE_AA)
 
-            if counted_classes != None:
-                height_ratio = int(image_h / 25)
-                offset = 15
-                for key, value in counted_classes.items():
-                    cv2.putText(image, "{}s detected: {}".format(key, value), (5, offset),
-                            cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (0, 255, 0), 2)
-                    offset += height_ratio
     #o.write("\n")
     print()
     return image
