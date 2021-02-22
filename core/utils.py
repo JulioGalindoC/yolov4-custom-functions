@@ -214,7 +214,7 @@ def format_boxes(bboxes, image_height, image_width):
     return bboxes
 
 def draw_bbox(image, bboxes, info = False, counted_classes = None, show_label=True, allowed_classes=list(read_class_names(cfg.YOLO.CLASSES).values()), read_plate = False):
-    o = open('BBox_Coords.txt', 'w')
+    #o = open('BBox_Coords.txt', 'w')
     classes = read_class_names(cfg.YOLO.CLASSES)
     num_classes = len(classes)
     image_h, image_w, _ = image.shape
@@ -250,7 +250,7 @@ def draw_bbox(image, bboxes, info = False, counted_classes = None, show_label=Tr
             cv2.rectangle(image, c1, c2, bbox_color, bbox_thick)
 
             if info:
-                o.write("{}, Confidence: {:.2f}, BBox Inf. Coords (xmin, ymin, xmax, ymin): {}, {}, {}, {} ".format(class_name, score, coor[0], coor[1], coor[2], coor[1]))
+                print("{}, Confidence: {:.2f}, BBox Inf. Coords (xmin, ymin, xmax, ymin): {}, {}, {}, {} ".format(class_name, score, coor[0], coor[1], coor[2], coor[1]))
 
             if show_label:
                 bbox_mess = '%s: %.2f' % (class_name, score)
@@ -268,7 +268,8 @@ def draw_bbox(image, bboxes, info = False, counted_classes = None, show_label=Tr
                     cv2.putText(image, "{}s detected: {}".format(key, value), (5, offset),
                             cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (0, 255, 0), 2)
                     offset += height_ratio
-    o.write("\n")
+    #o.write("\n")
+    print()
     return image
 
 def bbox_iou(bboxes1, bboxes2):
