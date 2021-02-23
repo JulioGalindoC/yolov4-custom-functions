@@ -218,7 +218,7 @@ def draw_bbox(count, image, bboxes, info = False, counted_classes = None, show_l
             cv2.rectangle(image, c1, c2, bbox_color, bbox_thick)
 
             if info:
-                print("{}, {:.1f}, {}, {}, {}".format(count, score*100, coor[0], coor[2], coor[1]))
+                print("{}, {:.0f}, {}, {}, {}".format(count, score*100, coor[0], coor[2], coor[1]))
 
             if show_label:
                 bbox_mess = '%s: %.2f' % (class_name, score)
