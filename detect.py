@@ -35,6 +35,7 @@ flags.DEFINE_boolean('ocr', False, 'perform generic OCR on detection regions')
 flags.DEFINE_boolean('plate', False, 'perform license plate recognition')
 
 def main(_argv):
+    print("Second, Confidence, Xmin, Xmax, Ymin")
     config = ConfigProto()
     config.gpu_options.allow_growth = True
     session = InteractiveSession(config=config)
