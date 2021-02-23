@@ -181,7 +181,7 @@ def format_boxes(bboxes, image_height, image_width):
         box[0], box[1], box[2], box[3] = xmin, ymin, xmax, ymax
     return bboxes
 
-def draw_bbox(image, bboxes, info = False, counted_classes = None, show_label=True, allowed_classes=list(read_class_names(cfg.YOLO.CLASSES).values()), read_plate = False):
+def draw_bbox(count, image, bboxes, info = False, counted_classes = None, show_label=True, allowed_classes=list(read_class_names(cfg.YOLO.CLASSES).values()), read_plate = False):
     #o = open('BBox_Coords.txt', 'w')
     classes = read_class_names(cfg.YOLO.CLASSES)
     num_classes = len(classes)
@@ -218,7 +218,7 @@ def draw_bbox(image, bboxes, info = False, counted_classes = None, show_label=Tr
             cv2.rectangle(image, c1, c2, bbox_color, bbox_thick)
 
             if info:
-                print("{}, Confidence: {:.2f}, BBox Inf. Coords (xmin, ymin, xmax, ymin): {}, {}, {}, {}".format(class_name, score, coor[0], coor[1], coor[2], coor[1]))
+                print("{}, {:.1f}, {}, {}, {}".format(count-1, score*100, coor[0], coor[2], coor[1]))
 
             if show_label:
                 bbox_mess = '%s: %.2f' % (class_name, score)
