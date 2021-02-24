@@ -46,6 +46,7 @@ def main(_argv):
     # get video name by using split method
     video_name = video_path.split('/')[-1]
     video_name = video_name.split('.')[0]
+    '''
     if FLAGS.framework == 'tflite':
         interpreter = tf.lite.Interpreter(model_path=FLAGS.weights)
         interpreter.allocate_tensors()
@@ -53,9 +54,10 @@ def main(_argv):
         output_details = interpreter.get_output_details()
         print(input_details)
         print(output_details)
-    else:
-        saved_model_loaded = tf.saved_model.load(FLAGS.weights, tags=[tag_constants.SERVING])
-        infer = saved_model_loaded.signatures['serving_default']
+    '''
+    
+    saved_model_loaded = tf.saved_model.load(FLAGS.weights, tags=[tag_constants.SERVING])
+    infer = saved_model_loaded.signatures['serving_default']
 
     # begin video capture
     try:
@@ -89,7 +91,7 @@ def main(_argv):
         image_data = image_data / 255.
         image_data = image_data[np.newaxis, ...].astype(np.float32)
         start_time = time.time()
-
+        '''
         if FLAGS.framework == 'tflite':
             interpreter.set_tensor(input_details[0]['index'], image_data)
             interpreter.invoke()
@@ -100,12 +102,13 @@ def main(_argv):
             else:
                 boxes, pred_conf = filter_boxes(pred[0], pred[1], score_threshold=0.25,
                                                 input_shape=tf.constant([input_size, input_size]))
-        else:
-            batch_data = tf.constant(image_data)
-            pred_bbox = infer(batch_data)
-            for key, value in pred_bbox.items():
-                boxes = value[:, :, 0:4]
-                pred_conf = value[:, :, 4:]
+        '''
+        
+        batch_data = tf.constant(image_data)
+        pred_bbox = infer(batch_data)
+        for key, value in pred_bbox.items():
+            boxes = value[:, :, 0:4]
+            pred_conf = value[:, :, 4:]
 
         boxes, scores, classes, valid_detections = tf.image.combined_non_max_suppression(
             boxes=tf.reshape(boxes, (tf.shape(boxes)[0], -1, 1, 4)),
@@ -130,7 +133,7 @@ def main(_argv):
         allowed_classes = list(class_names.values())
         
         # custom allowed classes (uncomment line below to allow detections for only people)
-        #allowed_classes = ['person']
+        allowed_classes = ['person']
 
         # if crop flag is enabled, crop each detection and save it as new image
         if FLAGS.crop:
@@ -149,7 +152,7 @@ def main(_argv):
                 crop_objects(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB), pred_bbox, final_path, allowed_classes)
             else:
                 pass
-
+        '''
         if FLAGS.count:
             # count objects found
             counted_classes = count_objects(pred_bbox, by_class = False, allowed_classes=allowed_classes)
@@ -157,8 +160,9 @@ def main(_argv):
             for key, value in counted_classes.items():
                 print("Number of {}s: {}".format(key, value))
             image = utils.draw_bbox(frame_num, frame, pred_bbox, FLAGS.info, counted_classes, allowed_classes=allowed_classes, read_plate=FLAGS.plate)
-        else:
-            image = utils.draw_bbox(frame_num, frame, pred_bbox, FLAGS.info, allowed_classes=allowed_classes, read_plate=FLAGS.plate)
+        '''
+        
+        image = utils.draw_bbox(frame_num, frame, pred_bbox, FLAGS.info, allowed_classes=allowed_classes, read_plate=FLAGS.plate)
         
         fps = 1.0 / (time.time() - start_time)
         print("FPS: %.2f" % fps)
